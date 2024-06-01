@@ -21,3 +21,7 @@ Uses .env.local locally, and Vercel env vars for builds. An example env files is
 ## Deployments
 
 -> add detail, deploys on vercel
+
+## Production
+
+The production version of the app can be viewed at [aesthetic-prod.vercel.app](https://aesthetic-prod.vercel.app/).
