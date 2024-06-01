@@ -33,6 +33,7 @@ export function ImageResultCard({ imageResult, position, sx }: Props) {
   const swipeConfig = {
     trackTouch: true,
     trackMouse: true,
+    preventScrollOnSwipe: true,
     swipeDuration: 250,
     touchEventOptions: { passive: true },
   };
