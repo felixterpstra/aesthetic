@@ -10,7 +10,6 @@ import { SnackbarProvider } from 'notistack';
 
 export function SearchView() {
   const { feedbackItems } = useFeedback();
-  console.log('feedbackItems', feedbackItems);
   const [searchText, setSearchText] = useState('');
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [isSearchError, setIsSearchError] = useState(false);

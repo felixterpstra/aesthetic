@@ -25,7 +25,6 @@ const TwoColumns = styled.div`
 export function MyItemsView() {
   const { feedbackItems, removeAllFeedbackItems } = useFeedback();
   const [feedbackType, setFeedbackType] = useState<'positive' | 'negative'>('positive');
-  console.log('feedbackType', feedbackType);
 
   const handleClear = () => {
     removeAllFeedbackItems();

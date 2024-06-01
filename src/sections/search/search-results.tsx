@@ -1,7 +1,6 @@
 import { SerpImageResult } from '@/services/serp';
 import { Box } from '@mui/material';
 import { ImageResultCard } from '@/sections/search/image-result-card';
-import styled from '@emotion/styled';
 
 type Props = {
   imageResults: SerpImageResult[];
