@@ -1,6 +1,8 @@
 import axios from 'axios';
+import serpSearchResponseMock from './mocks/serp-search-response.json';
+import { USE_MOCKS } from '@/constants';
 
-type SerpSearchResponse = {
+export type SerpSearchResponse = {
   search_metadata: {
     id: string;
     status: string;
@@ -32,7 +34,7 @@ type SerpSearchResponse = {
   };
 };
 
-type SerpSuggestedSearch = {
+export type SerpSuggestedSearch = {
   name: string;
   link: string;
   uds: string;
@@ -41,7 +43,7 @@ type SerpSuggestedSearch = {
   thumbnail: string;
 };
 
-type SerpImageResult = {
+export type SerpImageResult = {
   position: number;
   thumbnail: string;
   related_content_id: string;
@@ -56,7 +58,7 @@ type SerpImageResult = {
   is_product: boolean;
 };
 
-type SerpRelatedSearch = {
+export type SerpRelatedSearch = {
   link: string;
   serpapi_link: string;
   query: string;
@@ -64,12 +66,19 @@ type SerpRelatedSearch = {
   thumbnail: string;
 };
 
-export async function fetchImagesForQuery(queryText: string): Promise<SerpSearchResponse> {
+export async function fetchImagesForQuery(queryText: string): Promise<SerpImageResult[]> {
+  if (USE_MOCKS) {
+    return new Promise((resolve) => {
+      const mock = serpSearchResponseMock as SerpSearchResponse;
+      resolve(mock.images_results);
+    });
+  }
+
   try {
     const res = await axios.get<SerpSearchResponse>('/api/serp/search', {
       params: { queryText },
     });
-    return res.data;
+    return res.data.images_results;
   } catch (error) {
     throw new Error('Failed to fetch image results');
   }
