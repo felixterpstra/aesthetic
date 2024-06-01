@@ -42,6 +42,18 @@ export function SearchView() {
 
   return (
     <Container maxWidth="md">
+      <Typography
+        paddingTop={3}
+        fontSize={18}
+        fontWeight={800}
+        fontStyle="italic"
+        color="rgb(200,200,200)"
+        textAlign="center"
+        paddingBottom={2}
+      >
+        AESTHETIC
+      </Typography>
+
       <Stack paddingY={2} direction="row" spacing={1}>
         <Box flexGrow={1}>
           <TextField
