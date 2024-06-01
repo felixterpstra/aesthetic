@@ -13,6 +13,14 @@ import {
 } from '@mui/material';
 import { useFeedback } from '@/context/feedback';
 import { useMemo, useState } from 'react';
+import styled from '@emotion/styled';
+
+const TwoColumns = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  column-gap: 20px;
+`;
 
 export function MyItemsView() {
   const { feedbackItems, removeAllFeedbackItems } = useFeedback();
@@ -67,15 +75,15 @@ export function MyItemsView() {
         )}
 
         {filteredFeedbackItems.length > 0 && (
-          <Stack direction="row" spacing={2} flexWrap="wrap">
+          <TwoColumns>
             {filteredFeedbackItems.map((item) => (
-              <Box key={item.imageResult.thumbnail} width="50%">
+              <Box key={item.imageResult.thumbnail}>
                 <Card>
                   <img src={item.imageResult.thumbnail} width="100%" alt={item.imageResult.title} />
                 </Card>
               </Box>
             ))}
-          </Stack>
+          </TwoColumns>
         )}
       </Stack>
     </Container>

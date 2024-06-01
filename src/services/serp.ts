@@ -44,6 +44,7 @@ export type SerpSuggestedSearch = {
 };
 
 export type SerpImageResult = {
+  index: number;
   position: number;
   thumbnail: string;
   related_content_id: string;
@@ -70,7 +71,12 @@ export async function fetchImagesForQuery(queryText: string): Promise<SerpImageR
   if (USE_MOCKS) {
     return new Promise((resolve) => {
       const mock = serpSearchResponseMock as SerpSearchResponse;
-      resolve(mock.images_results);
+      resolve(
+        mock.images_results.map((result, index) => ({
+          ...result,
+          index,
+        })),
+      );
     });
   }
 
@@ -78,7 +84,10 @@ export async function fetchImagesForQuery(queryText: string): Promise<SerpImageR
     const res = await axios.get<SerpSearchResponse>('/api/serp/search', {
       params: { queryText },
     });
-    return res.data.images_results;
+    return res.data.images_results.map((result, index) => ({
+      ...result,
+      index,
+    }));
   } catch (error) {
     throw new Error('Failed to fetch image results');
   }

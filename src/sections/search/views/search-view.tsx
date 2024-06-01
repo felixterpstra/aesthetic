@@ -4,11 +4,13 @@ import { Alert, Box, Button, CircularProgress, Container, Stack, Typography } fr
 import TextField from '@mui/material/TextField';
 import { useMemo, useState } from 'react';
 import { fetchImagesForQuery, SerpImageResult } from '@/services/serp';
-import { ImageResultCard } from '@/sections/search/image-result-card';
 import { useFeedback } from '@/context/feedback';
+import { SearchResults } from '@/sections/search/search-results';
+import { SnackbarProvider } from 'notistack';
 
 export function SearchView() {
   const { feedbackItems } = useFeedback();
+  console.log('feedbackItems', feedbackItems);
   const [searchText, setSearchText] = useState('');
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [isSearchError, setIsSearchError] = useState(false);
@@ -32,16 +34,20 @@ export function SearchView() {
   };
 
   const displayedResults = useMemo(() => {
-    return searchResults.filter(
+    const filtered = searchResults.filter(
       (searchResult) =>
         !feedbackItems.some(
           (feedbackItem) => feedbackItem.imageResult.thumbnail === searchResult.thumbnail,
         ),
     );
+
+    return filtered.slice(0, 3);
   }, [searchResults, feedbackItems]);
 
   return (
     <Container maxWidth="md">
+      <SnackbarProvider autoHideDuration={1500} />
+
       <Typography
         paddingTop={3}
         fontSize={18}
@@ -51,23 +57,30 @@ export function SearchView() {
         textAlign="center"
         paddingBottom={2}
       >
-        AESTHETIC
+        AESTHETIC APP
       </Typography>
 
-      <Stack paddingY={2} direction="row" spacing={1}>
-        <Box flexGrow={1}>
-          <TextField
-            value={searchText}
-            onChange={(event) => setSearchText(event.target.value)}
-            size="small"
-            placeholder="Search for inspiration"
-            sx={{ width: '100%' }}
-          />
-        </Box>
-        <Button onClick={handleSearch} size="small" variant="contained">
-          Search
-        </Button>
-      </Stack>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleSearch();
+        }}
+      >
+        <Stack paddingY={2} direction="row" spacing={1}>
+          <Box flexGrow={1}>
+            <TextField
+              value={searchText}
+              onChange={(event) => setSearchText(event.target.value)}
+              size="small"
+              placeholder="Search for inspiration"
+              sx={{ width: '100%' }}
+            />
+          </Box>
+          <Button type="submit" size="small" variant="contained">
+            Search
+          </Button>
+        </Stack>
+      </form>
 
       <Stack spacing={2}>
         {isSearchError && <Alert severity="error">Failed to search, please try again</Alert>}
@@ -82,13 +95,8 @@ export function SearchView() {
             <Typography color="rgb(100,100,100)">To get started, enter a search above</Typography>
           </Stack>
         )}
-        {searchResults.length > 0 && (
-          <Stack spacing={2}>
-            {displayedResults.slice(0, 5).map((searchResult) => (
-              <ImageResultCard key={searchResult.thumbnail} imageResult={searchResult} />
-            ))}
-          </Stack>
-        )}
+
+        {searchResults.length > 0 && <SearchResults imageResults={displayedResults} />}
       </Stack>
     </Container>
   );
