@@ -1,8 +1,9 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useRef } from 'react';
 import { SerpImageResult } from '@/services/serp';
 
+const STORAGE_KEY = 'feedback';
 const FEEDBACK_LOCAL_STORAGE_VERSION = 1;
 
 export type FeedbackItem = {
@@ -15,13 +16,11 @@ export type FeedbackLocalStorage = {
   feedbackItems: FeedbackItem[];
 };
 
-const STORAGE_KEY = 'feedbackStorage';
+const DEFAULT_FEEDBACK_STORAGE = { version: FEEDBACK_LOCAL_STORAGE_VERSION, feedbackItems: [] };
 
 const getFeedbackStorage = (): FeedbackLocalStorage => {
   const storedData = localStorage.getItem(STORAGE_KEY);
-  return storedData
-    ? (JSON.parse(storedData) as FeedbackLocalStorage)
-    : { version: FEEDBACK_LOCAL_STORAGE_VERSION, feedbackItems: [] };
+  return storedData ? (JSON.parse(storedData) as FeedbackLocalStorage) : DEFAULT_FEEDBACK_STORAGE;
 };
 
 const saveFeedbackStorage = (data: FeedbackLocalStorage): void => {
@@ -38,12 +37,16 @@ type FeedbackContextType = {
 const FeedbackContext = createContext<FeedbackContextType | undefined>(undefined);
 
 export const FeedbackProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>(
-    getFeedbackStorage().feedbackItems,
-  );
+  const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
 
   useEffect(() => {
-    saveFeedbackStorage({ version: FEEDBACK_LOCAL_STORAGE_VERSION, feedbackItems });
+    setFeedbackItems(getFeedbackStorage().feedbackItems);
+  }, []);
+
+  useEffect(() => {
+    if (feedbackItems.length > 0) {
+      saveFeedbackStorage({ version: FEEDBACK_LOCAL_STORAGE_VERSION, feedbackItems });
+    }
   }, [feedbackItems]);
 
   const addFeedbackItem = (feedbackItem: FeedbackItem) => {
@@ -55,6 +58,7 @@ export const FeedbackProvider: React.FC<{ children: ReactNode }> = ({ children }
   };
 
   const removeAllFeedbackItems = () => {
+    saveFeedbackStorage(DEFAULT_FEEDBACK_STORAGE);
     setFeedbackItems([]);
   };
 
