@@ -16,11 +16,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 ## Environment variables
 
-Uses .env.local locally, and Vercel env vars for builds. An example env files is provided (.env.example), get in touch to get real values.
-
-## Deployments
-
--> add detail, deploys on vercel
+Create a local `.env.local` based on `.env.example`. Add a valid Serp API key to get started.
 
 ## Production
 
