@@ -14,6 +14,10 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## Environment variables
+
+Uses .env.local locally, and Vercel env vars for builds. An example env files is provided (.env.example), get in touch to get real values.
+
 ## Deployments
 
 -> add detail, deploys on vercel
